@@ -29,12 +29,37 @@ class SongProvider extends ChangeNotifier {
       // Fetch songs
       final songs = await _repository.getSongs();
       songsState = AsyncValue.success(songs);
-      print("SUCCESS: fetched ${songs.length} songs");
     } catch (error) {
-      print("ERROR fetching songs: $error");
       songsState = AsyncValue.error(error);
     }
 
     notifyListeners();
+  }
+
+  Future<void> addSong({
+    required String title,
+    required String artist,
+    required int releaseYear,
+  }) async {
+    try {
+      await _repository.addSong(
+        title: title,
+        artist: artist,
+        releaseYear: releaseYear,
+      );
+
+      await fetchSongs();
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> deleteSong(String id) async {
+    try {
+      await _repository.deleteSong(id);
+      await fetchSongs();
+    } catch (error) {
+      throw error;
+    }
   }
 }
