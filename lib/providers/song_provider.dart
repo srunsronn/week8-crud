@@ -54,6 +54,15 @@ class SongProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> updateSong(Song song) async {
+    try {
+      await _repository.updateSong(song);
+      await fetchSongs();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   Future<void> deleteSong(String id) async {
     try {
       await _repository.deleteSong(id);
